@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">WiFiFinder</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="btSave">Save</string>
+    <string name="Room">Room</string>
 
 </resources>

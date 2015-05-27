@@ -1,15 +1,16 @@
 package guidefreitas.wififinder;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
-import android.content.IntentFilter;
-import android.net.wifi.WifiManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,26 +19,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
 
+    final ArrayList<WifiInfo> wifis = new ArrayList<>();
+    private final Handler handler = new Handler();
     WifiManager mainWifi;
     WifiReceiver receiverWifi;
-
-    private final Handler handler = new Handler();
-    ArrayList<WifiInfo> wifis = new ArrayList<WifiInfo>();
-
     private TextView textView;
     private EditText roomEt;
 
@@ -51,8 +46,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         receiverWifi = new WifiReceiver();
         registerReceiver(receiverWifi, new IntentFilter(
                 WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-        if(mainWifi.isWifiEnabled()==false)
-        {
+        if (!mainWifi.isWifiEnabled()) {
             mainWifi.setWifiEnabled(true);
         }
 
@@ -70,18 +64,15 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         });
     }
 
-    public void doInback()
-    {
+    public void doInback() {
         handler.postDelayed(new Runnable() {
 
             @Override
-            public void run()
-            {
+            public void run() {
                 mainWifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 
                 receiverWifi = new WifiReceiver();
-                registerReceiver(receiverWifi, new IntentFilter(
-                        WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+                registerReceiver(receiverWifi, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
                 mainWifi.startScan();
                 doInback();
             }
@@ -93,7 +84,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, 0, 0, "Refresh");
-        return super.onCreateOptionsMenu(menu);}
+        return super.onCreateOptionsMenu(menu);
+    }
 
     @Override
     public void onClick(View v) {
@@ -105,15 +97,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onPause()
-    {
+    protected void onPause() {
         unregisterReceiver(receiverWifi);
         super.onPause();
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         registerReceiver(receiverWifi, new IntentFilter(
                 WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         super.onResume();
@@ -125,18 +115,19 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+
         }
+
         return super.onOptionsItemSelected(item);
     }
 
-    private void setTextView(String msg){
+    private void setTextView(String msg) {
         System.out.println(msg);
         textView.setText(msg);
     }
 
-    public void saveWifiData(){
+    public void saveWifiData() {
         String filename = "wifi_data.txt";
         String root = Environment.getExternalStorageDirectory().toString();
         String filePath = root + "/";
@@ -152,7 +143,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             stream = new FileOutputStream(file, true);
             writer = new PrintWriter(stream);
             String prefix = room + "," + point + ",";
-            for(WifiInfo info : wifis){
+            for (WifiInfo info : wifis) {
                 String data = prefix + info.toPipe();
                 writer.println(data);
             }
@@ -164,18 +155,15 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         }
     }
 
-    class WifiReceiver extends BroadcastReceiver
-    {
-        public void onReceive(Context c, Intent intent)
-        {
+    class WifiReceiver extends BroadcastReceiver {
+        public void onReceive(Context c, Intent intent) {
 
             wifis.clear();
 
             List<ScanResult> wifiList;
             wifiList = mainWifi.getScanResults();
-            for(int i = 0; i < wifiList.size(); i++)
-            {
-                ScanResult wifi =  wifiList.get(i);
+            for (int i = 0; i < wifiList.size(); i++) {
+                ScanResult wifi = wifiList.get(i);
                 WifiInfo info = new WifiInfo();
                 info.setBssid(wifi.BSSID);
                 info.setSignal(wifi.level);

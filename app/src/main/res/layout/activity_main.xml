@@ -2,43 +2,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".MainActivity">
 
     <TextView
-        android:text=""
+        android:id="@+id/textView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView" />
+        android:text="" />
 
 
     <TextView
-        android:text="Sala"
+        android:id="@+id/roomLabel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/roomLabel"
-        android:layout_below="@+id/textView"/>
+        android:layout_below="@+id/textView"
+        android:text="@string/Room" />
 
     <EditText
+        android:id="@+id/roomEt"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/roomEt"
-        android:layout_below="@+id/roomLabel"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/roomLabel" />
 
 
     <Button
+        android:id="@+id/btSave"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Salvar"
-        android:id="@+id/btSave"
-        android:layout_marginTop="112dp"
-        android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textView"
+        android:layout_marginTop="112dp"
+        android:text="@string/btSave" />
 
 </RelativeLayout>
